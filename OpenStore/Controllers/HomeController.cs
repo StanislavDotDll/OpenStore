@@ -40,7 +40,7 @@ namespace OpenStore.Controllers
         {
             if (id == null) return RedirectToAction("Index");
             ViewBag.ProductId = id;
-            return View();
+            return View(db.Products.ToList());
         }
 
 
