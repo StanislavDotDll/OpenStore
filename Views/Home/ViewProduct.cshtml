@@ -1,0 +1,58 @@
+﻿@model IEnumerable<OpenStore.Model.Product>
+@{
+    Layout = "_Layout";
+}
+<div style="padding:50px; border:0; " class="col card">
+    <div class="row g-0">
+        <div class="col-md-4 bd-example">
+            <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                <ol class="carousel-indicators">
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class=""></li>
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" class="active"></li>
+                    <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" class=""></li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="carousel-item">
+                        <img style="padding: 15px; width: 100%; height: auto; display: block; margin: auto;" src="https://i2.rozetka.ua/goods/20300631/245162329_images_20300631876.jpg" />
+                    </div>
+                    <div class="carousel-item active">
+                        <img style="padding:15px;width: 100%;height:auto;display:block;margin:auto;" src="https://i2.rozetka.ua/goods/20301098/apple_iphone_12_64gb_blue_images_20301098481.jpg" />
+                    </div>
+                    <div class="carousel-item">
+                        <img style="padding: 15px; width: 100%; height: auto; display: block; margin: auto;" src="https://i8.rozetka.ua/goods/20300374/245162317_images_20300374801.jpg" />
+
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+        </div>
+
+        @foreach (var product in Model)
+        {
+            if (@product.Id == @ViewBag.ProductId)
+            {
+                <div class="col-md-8">
+                    <div class="card-body">
+
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Describe</p>
+                        <p class="h4"><span class="badge bg-success">$@product.Price</span></p>
+                        <input class="btn btn-outline" style="width:60px; border: 1px solid gray" type="number" value="1" />
+                        <a href="~/Home/Buy/@ViewBag.ProductId"><button type="button" class="btn btn-outline-success">Buy</button></a>
+                    </div>
+                </div>
+            }
+        }
+
+
+
+       
+    </div>
+</div>
