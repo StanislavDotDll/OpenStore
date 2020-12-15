@@ -19,19 +19,13 @@ namespace OpenStore
     public class Startup
     {
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ProductContext>(options => options.UseSqlServer(connection));
             services.AddControllersWithViews();
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                     .AddJwtBearer(options =>
                     {
@@ -45,9 +39,9 @@ namespace OpenStore
                             ValidAudience = AuthOptions.AUDIENCE,
                             ValidateLifetime = true,
 
-                      
+
                             IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                           
+
                             ValidateIssuerSigningKey = true,
                         };
                     });
@@ -56,20 +50,6 @@ namespace OpenStore
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseDeveloperExceptionPage();
-
-            app.UseStaticFiles();
-
-            app.UseRouting();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
-
-
             app.UseDeveloperExceptionPage();
 
             app.UseDefaultFiles();
@@ -82,11 +62,31 @@ namespace OpenStore
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
+
+
+            /*
+                        app.UseDefaultFiles();
+
+
+                        app.UseAuthentication();            
+
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllerRoute(
+                                name: "default",
+                                pattern: "{controller=Home}/{action=Index}/{id?}");
+                        });*/
         }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
 
     }
 }
