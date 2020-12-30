@@ -1,0 +1,86 @@
+﻿@{
+    Layout = "_Layout";
+}
+
+
+<div id="userInfo" style="display:block;">   
+    <input type="button" value="Выйти" id="logOut" />
+</div>
+<div>
+    <input type="submit" id="getDataByLogin" value="Данные по логину" />
+</div>
+<div>
+    <input type="submit" id="getDataByRole" value="Данные по роли" />
+</div>
+<script>
+    var tokenKey = "accessToken";
+    async function getTokenAsync() {
+
+        const formData = new FormData();
+
+        formData.append("grant_type", "password");
+        formData.append("username", document.getElementById("emailLogin").value);
+        formData.append("password", document.getElementById("passwordLogin").value);
+
+        const response = await fetch("/token", {
+            method: "POST",
+            headers: { "Accept": "application/json" },
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok === true) {
+
+            document.getElementById("userName").innerText = data.username;
+            document.getElementById("userInfo").style.display = "block";
+            document.getElementById("loginForm").style.display = "none";
+
+            sessionStorage.setItem(tokenKey, data.access_token);
+            console.log(data.access_token);
+        }
+        else {
+            console.log("Error: ", response.status, data.errorText);
+        }
+    };
+    async function getData(url) {
+        const token = sessionStorage.getItem(tokenKey);
+
+        const response = await fetch(url, {
+            method: "GET",
+            headers: {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + token
+            }
+        });
+        if (response.ok === true) {
+
+            const data = await response.json();
+            alert(data)
+        }
+        else
+            console.log("Status: ", response.status);
+    };
+
+
+
+    document.getElementById("logOut").addEventListener("click", e => {
+
+        sessionStorage.removeItem(tokenKey);
+    });
+
+
+    document.getElementById("getDataByLogin").addEventListener("click", e => {
+
+        e.preventDefault();
+        getData("/api/values/getlogin");
+    });
+
+    document.getElementById("getDataByRole").addEventListener("click", e => {
+
+        getTokenAsync();
+        e.preventDefault();
+
+        getData("/api/values/getrole");
+    });
+</script>
